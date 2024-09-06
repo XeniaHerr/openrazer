@@ -16,7 +16,7 @@
 #define USB_DEVICE_ID_RAZER_KRAKEN_V2 0x0510
 // Codename Unknown
 #define USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE 0x0527
-// Codename What the fuck?
+// Codename Unkown
 #define USB_DEVICE_ID_RAZER_KRAKEN_V2_KITTY_EDITION 0x0560
 
 #define USB_INTERFACE_PROTOCOL_NONE 0
