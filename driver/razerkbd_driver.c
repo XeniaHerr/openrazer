@@ -3807,6 +3807,7 @@ static void razer_kbd_init(struct razer_kbd_device *dev, struct usb_interface *i
     dev->usb_vid = usb_dev->descriptor.idVendor;
     dev->usb_pid = usb_dev->descriptor.idProduct;
     dev->usb_interface_protocol = intf->cur_altsetting->desc.bInterfaceProtocol;
+
 }
 
 /**
@@ -3814,6 +3815,7 @@ static void razer_kbd_init(struct razer_kbd_device *dev, struct usb_interface *i
  */
 static int razer_kbd_probe(struct hid_device *hdev, const struct hid_device_id *id)
 {
+    printk(KERN_WARNING " Hello World\n");
     int retval = 0;
     struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
     struct usb_device *usb_dev = interface_to_usbdev(intf);
@@ -4314,6 +4316,7 @@ static void razer_kbd_disconnect(struct hid_device *hdev)
     struct usb_device *usb_dev = interface_to_usbdev(intf);
 
     dev = hid_get_drvdata(hdev);
+    printk(KERN_WARNING "Goodbye World\n");
 
     // Other interfaces are actual key-emitting devices
     if(intf->cur_altsetting->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE) {

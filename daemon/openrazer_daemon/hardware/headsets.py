@@ -177,3 +177,48 @@ class RazerKrakenKittyEdition(__RazerDeviceBrightnessSuspend):
     MATRIX_DIMS = [1, 4]
 
     DEVICE_IMAGE = "https://assets2.razerzone.com/images/pnx.assets/1c503aa176bc82d999299aba0d6c7d2c/kraken-kitty-quartz.png"
+
+
+
+class RazerKrakenKittyEditionV2(__RazerDevice):
+    """
+    Class for the Razer Kraken Kitty Edition V2
+    """
+    EVENT_FILE_REGEX = re.compile(r'.*Razer_Kraken_Kitty_Chroma_Control-event-if00')
+
+    USB_VID = 0x1532
+    USB_PID = 0x0560
+    METHODS = ['get_device_type_headset',
+               'set_static_effect', 'set_spectrum_effect', 'set_none_effect', 'set_breath_single_effect', 'set_breath_dual_effect', 'set_breath_triple_effect',
+               'set_custom_kraken']
+    HAS_MATRIX = True
+    MATRIX_DIMS = [1, 4]
+
+    DEVICE_IMAGE = "https://assets2.razerzone.com/images/pnx.assets/1c503aa176bc82d999299aba0d6c7d2c/kraken-kitty-quartz.png"
+
+    def _suspend_device(self):
+        self.suspend_args.clear()
+        self.suspend_args['effect'] = self.zone["backlight"]["effect"]
+        if self.suspend_args['effect'] == "breathDual":
+            self.suspend_args['args'] = self.zone["backlight"]["colors"][0:6]
+        elif self.suspend_args['effect'] == "breathTriple":
+            self.suspend_args['args'] = self.zone["backlight"]["colors"][0:9]
+        else:
+            self.suspend_args['args'] = self.zone["backlight"]["colors"][0:3]
+
+        _dbus_chroma.set_none_effect(self)
+
+    def _resume_device(self):
+        effect = self.suspend_args.get('effect', '')
+        args = self.suspend_args.get('args', [])
+
+        if effect == 'spectrum':
+            _dbus_chroma.set_spectrum_effect(self)
+        elif effect == 'static':
+            _dbus_chroma.set_static_effect(self, *args)
+        elif effect == 'breathSingle':
+            _dbus_chroma.set_breath_single_effect(self, *args)
+        elif effect == 'breathDual':
+            _dbus_chroma.set_breath_dual_effect(self, *args)
+        elif effect == 'breathTriple':
+            _dbus_chroma.set_breath_triple_effect(self, *args)
